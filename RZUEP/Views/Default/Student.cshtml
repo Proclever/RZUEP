@@ -1,0 +1,87 @@
+﻿@model RZUEP.Models.Plans
+@{
+    Layout = "~/Views/_Layout.cshtml";
+    ViewBag.Title = " - grupa " + Model.grupa + " " + Model.kierunek;
+}
+
+<p>
+    <h3 style="text-align:center">Plan grupy @Model.grupa @Model.kierunek</h3>
+    <h4 style="color:#aaa;text-align:center">Wydział @Model.wydzial</h4>
+    <h4 style="color:#aaa;text-align:center">@Model.stopien.Replace("stopnia","stopień"), @Model.rok</h4>
+    <h4 style="color:#aaa;text-align:center">@Html.Raw(Model.semestr.Replace("Rozkład zajęć w roku akademickim ", ""))</h4>
+</p>
+
+<div id="najblizsze" class="jumbotron" style="margin-top:20px">
+    <div id="divloading" style="margin-bottom:30px">
+        <h3 style="text-align:center;margin-top:10px;color:#bbb;">Proszę czekać...</h3>
+        <img style="margin: auto;display:block;" src="@Url.Content("~/images/loader.gif")" />
+    </div>
+    @if (Model.Zajecias.Count > 0)
+    {
+        <p style="text-align:center"><a style="margin:20px;" class="btn btn-primary btn-lg" href="@Url.Action("PlanStudenta", new { id = Model.id })" role="button">Zobacz pełny plan</a></p>
+    }
+    else
+    {
+        <p style="text-align:center">Grupa nie ma zajęć w tym semestrze.</p>
+    }
+    <hr />
+    <h4 style="text-align:center;margin-top:20px;">Przydatne informacje</h4>
+    <p style="text-align:center">
+        @if (ViewBag.dziekanatwydziału != null && ViewBag.dziekanatwydziału != "")
+        {
+            <a style="margin:20px;" class="btn btn-primary btn-lg" href="@ViewBag.dziekanatwydziału" role="button">Dziekanat wydziału</a>
+        }
+        @if (ViewBag.aktualnosciwydzialu != null && ViewBag.aktualnosciwydzialu != "")
+        {
+            <a style="margin:20px;" class="btn btn-primary btn-lg" href="@ViewBag.aktualnosciwydzialu" role="button">Aktualności wydziału</a>
+        }
+        @if (ViewBag.sylabus != null && ViewBag.sylabus != "")
+        {
+            <a style="margin:20px;" class="btn btn-primary btn-lg" href="@ViewBag.sylabus" role="button">Sylabus</a>
+        }
+    </p>
+    <hr />
+    <p style="text-align:center;margin-top:20px;"><a style="margin:20px;" class="btn btn-primary btn-lg" href="@Url.Action("Index")" role="button">Pozostałe plany</a>@if (Request.Cookies["Plan_s." + Model.id.ToString()] != null)
+    { <a style="margin:20px;" class="btn btn-danger btn-lg confirm" href="@Url.Action("Usun", new { key = "Plan_s." + Model.id.ToString(), actionname = "Student", id = Model.id })" role="button">Usuń plan z listy</a> }
+    else
+    { <a style="margin:20px;" class="btn btn-primary btn-lg" href="@Url.Action("Dodaj", new { id = Model.id, actionname = "Student" })" role="button">Dodaj plan do listy</a> }</p>
+</div>
+@section scripts {
+    @if (Model.Zajecias.Count > 0)
+    {
+        <script>
+        var najblizsze = function() {
+            $.ajax({
+                url: location.origin + '/Najblizsze/?pracownik=false&id=@Html.Raw(Model.id.ToString())', success: function (data) {
+                    $('#najblizsze').find('#nastepne').remove().end();
+                    $('#najblizsze').find('#obecnie').remove().end();
+                    $('#najblizsze').find('#uwaga').remove().end();
+                    document.getElementById('najblizsze').insertAdjacentHTML('afterbegin', data);
+                    $('#divloading').hide();
+                }
+            });
+        }
+        najblizsze();
+        setInterval(najblizsze, 60000);
+        $(function () {
+            $('.confirm').click(function () {
+                return window.confirm("Jesteś pewien, że chcesz usunąć ten plan ze swojej listy?");
+            });
+        });
+        </script>
+    }
+    else
+    {
+        <script>
+            $('#divloading').hide();
+        </script>
+    }
+}
+
+@section styles{
+    <style>
+        a[role="button"] {
+            min-width: 202px;
+        }
+    </style>
+}

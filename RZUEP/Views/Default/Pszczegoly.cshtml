@@ -1,0 +1,24 @@
+﻿@using RZUEP.Models;
+@model Prozajecias
+<div class="event-info">
+    <div>
+        <p style="font-weight: bold !important;">@Model.rodzaj@if (Model.info != "" && Model.info != null){@Html.Raw("*")}, @Model.sala</p>
+        @if (Model.Grupies.Count>0)
+        {
+            <br />
+            <p style="font-weight: bold !important;">Grupy:</p>
+            <p>
+                @foreach (var g in Model.Grupies)
+                {
+                    @Html.Raw(g.nazwa)<br />
+                }
+            </p>
+        }
+        @if (Model.info != "" && Model.info != null)
+        {
+            <br />
+            <p style="font-weight: bold !important;">*Dodatkowe informacje:</p>
+            <p>@Html.Raw(Model.info)</p>
+        }
+    </div>
+</div>

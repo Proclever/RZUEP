@@ -1,0 +1,197 @@
+﻿@{
+    Layout = "~/Views/_Layout.cshtml";
+    ViewBag.Title = " - wybór planu grupy";
+}
+
+<p><h2 style="text-align:center">Rozkład zajęć studiów stacjonarnych Uniwersytetu Ekonomicznego w&nbsp;Poznaniu</h2></p>
+
+<p><h3 style="text-align:center;color:#aaa;">Wypełnij formularz i znajdź plan, który&nbsp;Cię&nbsp;interesuje.</h3></p>
+<hr />
+<div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div id="divsemestr" style="display:none;margin-top:20px">
+            <select id="semestr" name="semestr" class="form-control input-lg" onchange="OnSemestrChange(this.value)">
+                <option value="" selected disabled>Wybierz semestr...</option>
+            </select>
+        </div>
+        <div id="divstopien" style="display:none;margin-top:20px">
+            <select id="stopien" name="stopien" class="form-control input-lg" onchange="OnStopienChange(this.value)">
+                <option value="" selected disabled>Wybierz stopień...</option>
+            </select>
+        </div>
+        <div id="divrok" style="display:none;margin-top:20px">
+            <select id="rok" name="rok" class="form-control input-lg" onchange="OnRokChange(this.value)">
+                <option value="" selected disabled>Wybierz rok...</option>
+            </select>
+        </div>
+        <div id="divwydzial" style="display:none;margin-top:20px">
+            <select id="wydzial" name="wydzial" class="form-control input-lg" onchange="OnWydzialChange(this.value)">
+                <option value="" selected disabled>Wybierz wydział...</option>
+            </select>
+        </div>
+        <div id="divkierunek" style="display:none;margin-top:20px">
+            <select id="kierunek" name="kierunek" class="form-control input-lg" onchange="OnKierunekChange(this.value)">
+                <option value="" selected disabled>Wybierz kierunek...</option>
+            </select>
+        </div>
+        <div id="divgrupa" style="display:none;margin-top:20px">
+            <select id="grupa" name="grupa" class="form-control input-lg" onchange="OnGrupaChange(this.value)">
+                <option value="" selected disabled>Wybierz grupę...</option>
+            </select>
+        </div>
+        <div id="divsubmit" style="display:none;margin-top:20px">
+            @Html.Hidden("planid")
+            <p style="text-align:center">@Html.CheckBox("mojplan", false, new { @style = "transform: scale(1.2);" }) @Html.Label("Zapamiętaj ten plan", new { @class = "control-label", @style = "display:inline;" })</p>
+            <p style="text-align:center;margin-top:20px;"><input type="submit" value="Pokaż" class="btn btn-lg btn-primary" /></p>
+        </div>
+    }
+    <div id="divloading" style="margin-top:20px">
+        <h3 style="text-align:center;margin-top:10px;color:#bbb;">Proszę czekać...</h3>
+        <img style="margin: auto;display:block;" src="@Url.Content("~/images/loader.gif")" />
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        Start();
+        function Start() {
+            OnSemestrChange('');
+            $.ajax({
+                url: location.origin + '/GetSemestr', success: function (data) {
+                    document.getElementById('semestr').insertAdjacentHTML('beforeend', data);
+                    $('#divloading').hide();
+                    $('#divsemestr').show();
+                    if ($('#semestr').val() != '' && $('#semestr').val() != null) {
+                        OnSemestrChange($('#semestr').val());
+                    }
+                }
+            });
+        }
+        function OnSemestrChange(val) {
+            $('#divloading').show();
+            $('#stopien').val('');
+            $('#rok').val('');
+            $('#wydzial').val('');
+            $('#kierunek').val('');
+            $('#grupa').val('');
+            $('#planid').val(null);
+            $('#mojplan').prop('checked', false);
+            $('#divrok').hide();
+            $('#divwydzial').hide();
+            $('#divkierunek').hide();
+            $('#divgrupa').hide();
+            $('#divsubmit').hide();
+            if (val != '') {
+                $('#stopien').find('option').not(':first').remove().end().val('');
+                $.ajax({
+                    url: location.origin + '/GetStopien/?semestr=' + val, success: function (data) {
+                        document.getElementById('stopien').insertAdjacentHTML('beforeend', data);
+                        $('#divloading').hide();
+                        $('#divstopien').show();
+                    }
+                });
+            }
+        }
+        function OnStopienChange(val) {
+            $('#divloading').show();
+            $('#rok').val('');
+            $('#wydzial').val('');
+            $('#kierunek').val('');
+            $('#grupa').val('');
+            $('#planid').val(null);
+            $('#mojplan').prop('checked', false);
+            $('#divrok').hide();
+            $('#divwydzial').hide();
+            $('#divkierunek').hide();
+            $('#divgrupa').hide();
+            $('#divsubmit').hide();
+            if (val != '') {
+                $('#rok').find('option').not(':first').remove().end().val('');
+                $.ajax({
+                    url: location.origin + '/GetRok/?semestr=' + $('#semestr').val() + '&stopien=' + val, success: function (data) {
+                        document.getElementById('rok').insertAdjacentHTML('beforeend', data);
+                        $('#divloading').hide();
+                        $('#divrok').show();
+                    }
+                });
+            }
+        }
+        function OnRokChange(val) {
+            $('#divloading').show();
+            $('#wydzial').val('');
+            $('#kierunek').val('');
+            $('#grupa').val('');
+            $('#planid').val(null);
+            $('#mojplan').prop('checked', false);
+            $('#divwydzial').hide();
+            $('#divkierunek').hide();
+            $('#divgrupa').hide();
+            $('#divsubmit').hide();
+            if (val != '') {
+                $('#wydzial').find('option').not(':first').remove().end().val('');
+                $.ajax({
+                    url: location.origin + '/GetWydzial/?semestr=' + $('#semestr').val() + '&stopien=' + $('#stopien').val() + '&rok=' + val, success: function (data) {
+                        document.getElementById('wydzial').insertAdjacentHTML('beforeend', data);
+                        $('#divloading').hide();
+                        $('#divwydzial').show();
+                    }
+                });
+            }
+        }
+        function OnWydzialChange(val) {
+            $('#divloading').show();
+            $('#kierunek').val('');
+            $('#grupa').val('');
+            $('#planid').val(null);
+            $('#mojplan').prop('checked', false);
+            $('#divkierunek').hide();
+            $('#divgrupa').hide();
+            $('#divsubmit').hide();
+            if (val != '') {
+                $('#kierunek').find('option').not(':first').remove().end().val('');
+                $.ajax({
+                    url: location.origin + '/GetKierunek/?semestr=' + $('#semestr').val() + '&stopien=' + $('#stopien').val() + '&rok=' + $('#rok').val() + '&wydzial=' + val, success: function (data) {
+                        document.getElementById('kierunek').insertAdjacentHTML('beforeend', data);
+                        $('#divloading').hide();
+                        $('#divkierunek').show();
+                    }
+                });
+            }
+        }
+        function OnKierunekChange(val) {
+            $('#divloading').show();
+            $('#grupa').val('');
+            $('#planid').val(null);
+            $('#mojplan').prop('checked', false);
+            $('#divgrupa').hide();
+            $('#divsubmit').hide();
+            if (val != '') {
+                $('#grupa').find('option').not(':first').remove().end().val('');
+                $.ajax({
+                    url: location.origin + '/GetGrupa/?semestr=' + $('#semestr').val() + '&stopien=' + $('#stopien').val() + '&rok=' + $('#rok').val() + '&wydzial=' + $('#wydzial').val() + '&kierunek=' + val, success: function (data) {
+                        document.getElementById('grupa').insertAdjacentHTML('beforeend', data);
+                        $('#divloading').hide();
+                        $('#divgrupa').show();
+                    }
+                });
+            }
+        }
+        function OnGrupaChange(val) {
+            $('#divloading').show();
+            $('#planid').val(null);
+            $('#mojplan').prop('checked', false);
+            $('#divsubmit').hide();
+            if (val != '') {
+                $.ajax({
+                    url: location.origin + '/GetPlanid/?semestr=' + $('#semestr').val() + '&stopien=' + $('#stopien').val() + '&rok=' + $('#rok').val() + '&wydzial=' + $('#wydzial').val() + '&kierunek=' + $('#kierunek').val() + '&grupa=' + val, success: function (data) {
+                        document.getElementById('planid').value = data;
+                        $('#divloading').hide();
+                        $('#divsubmit').show();
+                    }
+                });
+            }
+        }
+    </script>
+}

@@ -1,0 +1,85 @@
+﻿@using System.Web.Optimization;
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rozkład zajęć UEP @ViewBag.Title</title>
+    <meta name="description" content="Twój plan i przydatne informacje zawsze pod ręką w wygodnej, intuicyjnej formie.">
+    <link rel="icon" href="@Url.Content("~/images/icon32.png")" />
+    <link rel="icon" href="@Url.Content("~/images/icon192.png")" />
+    <link rel="apple-touch-icon-precomposed" href="@Url.Content("~/images/icon180.png")" />
+    <meta name="msapplication-TileImage" content="@Url.Content("~/images/icon270.png")" />
+    @Styles.Render("~/Content/css")
+    @RenderSection("styles", required: false)
+    <style>
+        body {
+            animation: fadein 0.5s;
+            -moz-animation: fadein 0.5s; /* Firefox */
+            -webkit-animation: fadein 0.5s; /* Safari and Chrome */
+            -o-animation: fadein 0.5s; /* Opera */
+        }
+        @@keyframes fadein {
+        from {
+            opacity:0;
+        }
+        to {
+            opacity:1;
+        }
+        }
+    @@-moz-keyframes fadein { /* Firefox */
+        from {
+            opacity:0;
+        }
+        to {
+            opacity:1;
+        }
+    }
+    @@-webkit-keyframes fadein { /* Safari and Chrome */
+        from {
+            opacity:0;
+        }
+        to {
+            opacity:1;
+        }
+    }
+    @@-o-keyframes fadein { /* Opera */
+        from {
+            opacity:0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    </style>
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div style="display:none"><img src="@Url.Content("~/images/uep512.png")" /></div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p style="text-align:center">@Html.ActionLink("Home", "Index", null, new { @style = "color:#337ab7;" }) | @Html.ActionLink("Info", "Info", new { returnurl = HttpContext.Current.Request.Url.AbsoluteUri }, new { @style = "color:#337ab7;" }) | @Html.ActionLink("FAQ", "FAQ", new { returnurl = HttpContext.Current.Request.Url.AbsoluteUri }, new { @style = "color:#337ab7;" })</p>
+            <p style="text-align:center">RZUEP &copy; @DateTime.Now.Year</p>
+            <p style="text-align:center;margin-bottom:10px;">Utworzone dzięki <a href="http://proclever.pl/"><img src="@Url.Content("~/images/proclever14.png")" alt="PROCLEVER" /></a></p>
+        </footer>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript" id="cookieinfo"
+            src="//cookieinfoscript.com/js/cookieinfo.min.js"
+            data-cookie="CookieInfo"
+            data-text-align="left"
+            data-close-text="Rozumiem"
+            data-linkmsg="Więcej o cookies"
+            data-moreinfo="https://pl.wikipedia.org/wiki/HTTP_cookie"
+            data-message="Strona korzysta z plików cookies w celach funkcjonalnych. Kontynuując przeglądanie, zgadzasz się na ich wykorzystanie."
+            data-divlinkbg="#337ab7"
+            data-bg="#ddd"
+            data-divlink="#FFF">
+    </script>
+</body>
+</html>

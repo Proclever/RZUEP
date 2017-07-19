@@ -1,0 +1,49 @@
+﻿@{
+    Layout = "~/Views/_Layout.cshtml";
+    ViewBag.Title = " - informacje o stronie";
+}
+
+<p><h2 style="text-align:center">Rozkład zajęć studiów stacjonarnych Uniwersytetu Ekonomicznego w&nbsp;Poznaniu</h2></p>
+
+<p><h3 style="text-align:center;color:#aaa;">Informacje o stronie</h3></p>
+
+<hr />
+
+<p style="text-align:justify">
+    Strona została utworzona dla studentów i pracowników Uniwersytetu Ekonomicznego w Poznaniu. Zawiera aktualne oraz archiwalne plany zająć w trybie stacjonarnym, a także pozostałe przydatne informacje w wygodnej, intuicyjnej formie.
+</p>
+
+<p><h4 style="text-align:center;color:#333;margin-top:20px">Co możemy Ci zaoferować?</h4></p>
+
+<p>
+    • Wybór aktualnych oraz archiwalnych planów zajęć z opcją zapamiętania ich na Twojej liście.<br />
+    • Szybki podgląd na aktualnie trwające oraz kolejne zajęcia.<br />
+    • Intuicyjny widok rozkładu zajęć, zachowujacy przejrzystość również na urządzeniach mobilnych.<br />
+    • Dostęp do danych szczegółowych poszczególnych zajęć, takich jak grupy wydziałowe (dla pracowników) czy informacje o prowadzących oraz ich konsultacjach (dla studentów). Wystarczy kliknąć w interesujacy Cię blok.<br />
+    • Szybki dostęp do informacji związanych z Twoim wydziałem, dziekanatem, jednostką i sylabusem.<br />
+    • Możliwość łatwego udostępniania planów poprzez link.
+</p>
+
+<p><h4 style="text-align:center;color:#333;margin-top:20px">Korzystaj ze strony jak z aplikacji</h4></p>
+
+<p style="text-align:justify">
+    Jeżeli korzystasz z przeglądarki na urządzeniu mobilnym, masz możliwość dodania strony do swojego ekranu głównego. Po prostu wejdź na stronę główną (lub od razu na stronę z Twoim planem) i odszukaj w opcjach przeglądarki "Dodaj do ekranu głównego". W zależności od przeglądarki, ta opcja może nazywać się nieco inaczej. Jeżeli korzystasz z systemu iOS, ta opcja jest dostępna tylko dla Safari.
+</p>
+
+<p><h4 style="text-align:center;color:#333;margin-top:20px">Przeglądaj swój plan także w trybie offline</h4></p>
+
+<p style="text-align:justify">
+    Widok pełnego rozkładu zajęć nie wymaga połączenia z internetem. Większość przeglądarek umożliwia pobranie strony, dzięki czemu możesz mieć do niej dostęp w trybie offline. Skorzystaj z tej opcji, dodając stronę pełnego planu, aby mieć go zawsze pod ręką.
+</p>
+
+@if (ViewBag.returnurl!=null && ViewBag.returnurl.Split('?')[0] != HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[0])
+{
+    <p style="text-align:center"><a style="margin:20px;" class="btn btn-primary btn-lg" href="@ViewBag.returnurl" role="button">Powrót</a></p>
+}
+
+<hr />
+<p><h4 style="text-align:center;color:#333;">Napisz do nas</h4></p>
+
+<p style="text-align:center">
+    Wszystkie pytania, uwagi oraz opinie prosimy o przesłanie na adres<br><a href="mailto:kontakt@proclever.pl">kontakt@proclever.pl</a>
+</p>
