@@ -1,4 +1,5 @@
 ﻿@model RZUEP.Models.Proprowadzacies
+@if (ViewBag.aktualizacja) { Response.Redirect(Url.Action("Pracownik", new { id = Model.id })); }
 @{
     Layout = "~/Views/_Layout.cshtml";
     ViewBag.Title = " - plan pracownika " + Model.nazwa;

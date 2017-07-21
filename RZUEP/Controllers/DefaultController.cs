@@ -190,6 +190,7 @@ namespace RZUEP.Controllers
             ViewBag.dziekanatwydziału = dziekanatwydziału;
             ViewBag.aktualnosciwydzialu = aktualnosciwydzialu;
             ViewBag.sylabus = sylabus;
+            ViewBag.aktualizacja = GlobalVariables.Aktualizacja;
             return View(db.Proprowadzacies.Find(id));
         }
 
@@ -223,25 +224,30 @@ namespace RZUEP.Controllers
                 ViewBag.height = ((110 * maxzajecias) - 10).ToString();
                 goto end;
             }
-            var hod = db.Proprowadzacies.Find(id).Prozajecias.OrderBy(x => x.godzinaod).First().godzinaod.Split(':')[0];
-            var hdo = db.Proprowadzacies.Find(id).Prozajecias.OrderBy(x => x.godzinado).Last().godzinado.Split(':')[0];
-            var mdo = db.Proprowadzacies.Find(id).Prozajecias.OrderBy(x => x.godzinado).Last().godzinado.Split(':')[1];
-            timelist = new List<string> { hod + ":00" };
-            var i = int.Parse(hod);
-            while (i < int.Parse(hdo))
+            try
             {
-                timelist.Add((i.ToString().Length == 1 ? "0" + i.ToString() : i.ToString()) + ":30");
-                timelist.Add(((i + 1).ToString().Length == 1 ? "0" + (i + 1).ToString() : (i + 1).ToString()) + ":00");
-                i++;
+                var hod = db.Proprowadzacies.Find(id).Prozajecias.OrderBy(x => x.godzinaod).First().godzinaod.Split(':')[0];
+                var hdo = db.Proprowadzacies.Find(id).Prozajecias.OrderBy(x => x.godzinado).Last().godzinado.Split(':')[0];
+                var mdo = db.Proprowadzacies.Find(id).Prozajecias.OrderBy(x => x.godzinado).Last().godzinado.Split(':')[1];
+                timelist = new List<string> { hod + ":00" };
+                var i = int.Parse(hod);
+                while (i < int.Parse(hdo))
+                {
+                    timelist.Add((i.ToString().Length == 1 ? "0" + i.ToString() : i.ToString()) + ":30");
+                    timelist.Add(((i + 1).ToString().Length == 1 ? "0" + (i + 1).ToString() : (i + 1).ToString()) + ":00");
+                    i++;
+                }
+                if (mdo != "00")
+                {
+                    timelist.Add((i.ToString().Length == 1 ? "0" + i.ToString() : i.ToString()) + ":30");
+                    timelist.Add(((i + 1).ToString().Length == 1 ? "0" + (i + 1).ToString() : (i + 1).ToString()) + ":00");
+                }
             }
-            if (mdo != "00")
-            {
-                timelist.Add((i.ToString().Length == 1 ? "0" + i.ToString() : i.ToString()) + ":30");
-                timelist.Add(((i + 1).ToString().Length == 1 ? "0" + (i + 1).ToString() : (i + 1).ToString()) + ":00");
-            }
+            catch { }
             end:
             ViewBag.timelist = timelist;
             ViewBag.normal = normal;
+            ViewBag.aktualizacja = GlobalVariables.Aktualizacja;
             return View(pracownik);
         }
 
@@ -372,6 +378,7 @@ namespace RZUEP.Controllers
             ViewBag.dziekanatwydziału = dziekanatwydziału;
             ViewBag.aktualnosciwydzialu = aktualnosciwydzialu;
             ViewBag.sylabus = sylabus;
+            ViewBag.aktualizacja = GlobalVariables.Aktualizacja;
             return View(db.Plans.Find(id));
         }
 
@@ -405,25 +412,30 @@ namespace RZUEP.Controllers
                 ViewBag.height = ((110 * maxzajecias) - 10).ToString();
                 goto end;
             }
-            var hod = db.Plans.Find(id).Zajecias.OrderBy(x => x.godzinaod).First().godzinaod.Split(':')[0];
-            var hdo = db.Plans.Find(id).Zajecias.OrderBy(x => x.godzinado).Last().godzinado.Split(':')[0];
-            var mdo = db.Plans.Find(id).Zajecias.OrderBy(x => x.godzinado).Last().godzinado.Split(':')[1];
-            timelist = new List<string> { hod + ":00" };
-            var i = int.Parse(hod);
-            while (i < int.Parse(hdo))
+            try
             {
-                timelist.Add((i.ToString().Length == 1 ? "0" + i.ToString() : i.ToString()) + ":30");
-                timelist.Add(((i + 1).ToString().Length == 1 ? "0" + (i + 1).ToString() : (i + 1).ToString()) + ":00");
-                i++;
+                var hod = db.Plans.Find(id).Zajecias.OrderBy(x => x.godzinaod).First().godzinaod.Split(':')[0];
+                var hdo = db.Plans.Find(id).Zajecias.OrderBy(x => x.godzinado).Last().godzinado.Split(':')[0];
+                var mdo = db.Plans.Find(id).Zajecias.OrderBy(x => x.godzinado).Last().godzinado.Split(':')[1];
+                timelist = new List<string> { hod + ":00" };
+                var i = int.Parse(hod);
+                while (i < int.Parse(hdo))
+                {
+                    timelist.Add((i.ToString().Length == 1 ? "0" + i.ToString() : i.ToString()) + ":30");
+                    timelist.Add(((i + 1).ToString().Length == 1 ? "0" + (i + 1).ToString() : (i + 1).ToString()) + ":00");
+                    i++;
+                }
+                if (mdo != "00")
+                {
+                    timelist.Add((i.ToString().Length == 1 ? "0" + i.ToString() : i.ToString()) + ":30");
+                    timelist.Add(((i + 1).ToString().Length == 1 ? "0" + (i + 1).ToString() : (i + 1).ToString()) + ":00");
+                }
             }
-            if (mdo != "00")
-            {
-                timelist.Add((i.ToString().Length == 1 ? "0" + i.ToString() : i.ToString()) + ":30");
-                timelist.Add(((i + 1).ToString().Length == 1 ? "0" + (i + 1).ToString() : (i + 1).ToString()) + ":00");
-            }
+            catch { }
             end:
             ViewBag.timelist = timelist;
             ViewBag.normal = normal;
+            ViewBag.aktualizacja = GlobalVariables.Aktualizacja;
             return View(student);
         }
 
@@ -680,6 +692,14 @@ namespace RZUEP.Controllers
             }
             var returnvalue = (obecnie == "" ? "" : "<p id=\"obecnie\" style=\"text-align:center\">" + obecnie + (onormal?"":" *") + "</p>") + "<p id=\"nastepne\" style=\"text-align:center\">" + nastepne + (nnormal?"":" *") + "</p>" + (onormal&&nnormal?"": "<p id=\"uwaga\" style=\"text-align:center;font-size:100%\">* może nie dotyczyć - szczegóły w pełnym planie zajęć</p>");
             return returnvalue;
+        }
+        public bool AktualizacjaZmiana (bool status, string key)
+        {
+            if(key == "6b6c4474-e160-40d8-acdc-ad28f8001a49")
+            {
+                GlobalVariables.Aktualizacja = status;
+            }
+            return GlobalVariables.Aktualizacja;
         }
     }
 }

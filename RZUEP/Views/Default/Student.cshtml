@@ -16,13 +16,16 @@
         <h3 style="text-align:center;margin-top:10px;color:#bbb;">Proszę czekać...</h3>
         <img style="margin: auto;display:block;" src="@Url.Content("~/images/loader.gif")" />
     </div>
-    @if (Model.Zajecias.Count > 0)
+    @if (Model.Zajecias.Count > 0 && !ViewBag.aktualizacja)
     {
         <p style="text-align:center"><a style="margin:20px;" class="btn btn-primary btn-lg" href="@Url.Action("PlanStudenta", new { id = Model.id })" role="button">Zobacz pełny plan</a></p>
     }
     else
     {
-        <p style="text-align:center">Grupa nie ma zajęć w tym semestrze.</p>
+        if (ViewBag.aktualizacja)
+        { <p style="text-align:center">Trwa aktualizacja planów - spróbuj później.</p> }
+        else
+        { <p style="text-align:center">Grupa nie ma zajęć w tym semestrze.</p> }
     }
     <hr />
     <h4 style="text-align:center;margin-top:20px;">Przydatne informacje</h4>
@@ -31,6 +34,7 @@
         {
             <a style="margin:20px;" class="btn btn-primary btn-lg" href="@ViewBag.dziekanatwydziału" role="button">Dziekanat wydziału</a>
         }
+        <a style="margin:20px;" class="btn btn-primary btn-lg" href="http://ue.poznan.pl/pl/studenci,c172/komunikaty,c176/" role="button">Komunikaty</a>
         @if (ViewBag.aktualnosciwydzialu != null && ViewBag.aktualnosciwydzialu != "")
         {
             <a style="margin:20px;" class="btn btn-primary btn-lg" href="@ViewBag.aktualnosciwydzialu" role="button">Aktualności wydziału</a>
@@ -47,7 +51,7 @@
     { <a style="margin:20px;" class="btn btn-primary btn-lg" href="@Url.Action("Dodaj", new { id = Model.id, actionname = "Student" })" role="button">Dodaj plan do listy</a> }</p>
 </div>
 @section scripts {
-    @if (Model.Zajecias.Count > 0)
+    @if (Model.Zajecias.Count > 0 && !ViewBag.aktualizacja)
     {
         <script>
         var najblizsze = function() {
