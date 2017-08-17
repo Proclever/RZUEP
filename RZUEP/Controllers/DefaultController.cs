@@ -655,7 +655,7 @@ namespace RZUEP.Controllers
                     if (nastzaj.dzien == dzien && god > godzina)
                     {
                         var roznica = god - godzina;   
-                        if(roznica.Hours<3) nastepne += "(za " + (roznica.Hours == 0 ?" ": roznica.Hours.ToString() + " godz.") + (roznica.Minutes % 60 == 0 ? " " : (roznica.Minutes%60).ToString() + " min.") + ")";
+                        if(roznica.Hours<3) nastepne += "(za " + (roznica.Hours == 0 ?" ": roznica.Hours.ToString() + " godz.") + (roznica.Minutes % 60 == 0 ? "" : " " + (roznica.Minutes%60).ToString() + " min.") + ")";
                         else nastepne += "(o godz. " + nastzaj.godzinaod + ")";
                     }
                     else
@@ -776,7 +776,7 @@ namespace RZUEP.Controllers
                     if (nastzaj.dzien == dzien && god > godzina)
                     {
                         var roznica = god - godzina;
-                        if (roznica.Hours < 3) nastepne += "(za " + (roznica.Hours == 0 ? " " : roznica.Hours.ToString() + " godz.") + (roznica.Minutes % 60 == 0 ? " " : (roznica.Minutes % 60).ToString() + " min.") + ")";
+                        if (roznica.Hours < 3) nastepne += "(za " + (roznica.Hours == 0 ? " " : roznica.Hours.ToString() + " godz.") + (roznica.Minutes % 60 == 0 ? "" : " " + (roznica.Minutes % 60).ToString() + " min.") + ")";
                         else nastepne += "(o godz. " + nastzaj.godzinaod + ")";
                     }
                     else

@@ -3,6 +3,7 @@
 <div class="event-info">
     <div>
         <p style="font-weight: bold !important;">@Model.rodzaj@if (Model.info != "" && Model.info != null){@Html.Raw("*")}, @Model.sala</p>
+        <a style="margin-top:5px;margin-bottom:5px;margin-right:5px;" class="btn btn-danger btn-sm" href="@Url.Action("PlanStudenta", new { id = Model.planid, idtohide = Model.id })" role="button" onclick="return window.confirm('Jesteś pewien, że chcesz ukryć te zajęcia? Nie będą one również wyświetlane na podglądzie aktualnych i kolejnych zajęć.');">Ukryj te zajęcia</a>
         @if (Model.Prowadzacies.Count>0)
         {
             <br />
@@ -12,7 +13,7 @@
                 {
                     @Html.Raw(g.nazwa)
                     <br />
-                    <a style="margin-top:5px;margin-bottom:5px;margin-right:5px;" class="btn btn-primary btn-sm" href="https://www.google.pl/search?q=Uniwersytet Ekonomiczny w Poznaniu @g.nazwa" role="button">Informacje</a><a style="margin-top:5px;margin-bottom:5px;margin-right:5px;" class="btn btn-primary btn-sm" href="https://www.google.pl/search?q=Uniwersytet Ekonomiczny w Poznaniu @g.nazwa konsultacje" role="button">Konsultacje</a><a style="margin-top:5px;margin-bottom:5px;margin-right:5px;" class="btn btn-danger btn-sm" href="@Url.Action("PlanStudenta", new { id = Model.planid, idtohide = Model.id })" role="button" onclick="return window.confirm('Jesteś pewien, że chcesz ukryć te zajęcia? Nie będą one również wyświetlane na podglądzie aktualnych i kolejnych zajęć.');">Ukryj te zajęcia</a>
+                    <a style="margin-top:5px;margin-bottom:5px;margin-right:5px;" class="btn btn-primary btn-sm" href="https://www.google.pl/search?q=Uniwersytet Ekonomiczny w Poznaniu @g.nazwa" role="button">Informacje</a><a style="margin-top:5px;margin-bottom:5px;margin-right:5px;" class="btn btn-primary btn-sm" href="https://www.google.pl/search?q=Uniwersytet Ekonomiczny w Poznaniu @g.nazwa konsultacje" role="button">Konsultacje</a>
                     <br />
                 }
             </p>
