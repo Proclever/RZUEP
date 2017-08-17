@@ -11,7 +11,33 @@
     <h4 style="color:#aaa;text-align:center">@Model.stopien.Replace("stopnia", "stopień"), @Model.rok</h4>
     <h4 style="color:#aaa;text-align:center">@Html.Raw(Model.semestr.Replace("Rozkład zajęć w roku akademickim ", ""))</h4>
 </p>
-
+@if(Request.Cookies.AllKeys.ToList().Where(x => x.Equals("NotFirst")).Count() == 0)
+{
+    <div class="jumbotron" style="margin: 0 auto;margin-top:15px;max-width:900px;padding:10px;">
+        <p style="text-align:center">Oto widok pełnego rozkładu zajęć.<br>Kliknij w interesujący Cię blok, aby przejść do szczegółowych informacji oraz opcji.</p>
+        <p style="text-align:center">Zobacz także <a style="color:#337ab7;" href="@Url.Action("Info", new { returnurl = HttpContext.Current.Request.Url.AbsoluteUri })">jak korzystać ze strony jak z aplikacji mobilnej i przeglądać swój plan offline</a>.</p>
+    </div>
+}
+<p style="text-align:center">
+    @if (ViewBag.normal && !ViewBag.onlyblock)
+    {
+        <a style="margin:10px;" class="btn btn-default btn-sm" href="@Url.Action("PlanStudenta", new { id = Model.id, onlyblock = true })" role="button">Zmień układ na blokowy</a>
+    }
+    @if (ViewBag.normal && ViewBag.onlyblock)
+    {
+        <a style="margin:10px;" class="btn btn-default btn-sm" href="@Url.Action("PlanStudenta", new { id = Model.id, onlyblock = false })" role="button">Zmień układ na czasowy</a>
+    }
+    @if (Request.Cookies.AllKeys.ToList().Where(x => x.Contains("hide.s." + Model.id.ToString() + ".")).Count() > 0 && ViewBag.unhide == null)
+    {
+        <a style="margin:10px;" class="btn btn-default btn-sm" href="@Url.Action("PlanStudenta", new { id = Model.id, unhide = true })" role="button">Pokaż ukryte zajęcia</a>
+    }
+</p>
+@{ 
+    HttpCookie cookie = new HttpCookie("NotFirst");
+    cookie.Expires = DateTime.Now.AddMonths(12);
+    cookie.Value = null;
+    Response.Cookies.Add(cookie);
+}
 <div class="cd-schedule loading">
     <div class="timeline">
         <ul class="timeline-ul">
@@ -23,12 +49,13 @@
     </div> <!-- .timeline -->
     <div class="events">
         <ul>
-            <li class="events-group">
+            <li class="events-group" @if ((int)DateTime.Now.DayOfWeek - 1 == 0) { @Html.Raw("style=\"background-color:#ffb;\"") }>
                 <div class="top-info"><span>Poniedziałek</span></div>
                 <ul class="event-ul">
                     @foreach (var z in Model.Zajecias.Where(x => x.dzien == 0).ToList())
                     {
-                        <li class="single-event" data-start="@z.godzinaod" data-end="@z.godzinado" data-content="@Url.Action("Sszczegoly", new { id = z.id })" data-event="@z.rodzaj.ToLower().Replace('ć','c').Replace('ł','l')">
+                        if (Request.Cookies.AllKeys.ToList().Where(x => x.Equals("hide.s." + z.planid.ToString() + "." + z.id.ToString())).Count() > 0 && ViewBag.unhide == null) { continue; }
+                        <li id="@z.id.ToString()" class="single-event" data-start="@z.godzinaod" data-end="@z.godzinado" data-content="@Url.Action("Sszczegoly", new { id = z.id })" data-event="@z.rodzaj.ToLower().Replace('ć','c').Replace('ł','l')">
                             <a id="block" style="text-decoration:none" href="#0">
                                 <em class="event-name">@z.nazwa</em>
                                 <em>@z.rodzaj@if (z.info != null && z.info != "")
@@ -38,12 +65,13 @@
                     }
                 </ul>
             </li>
-            <li class="events-group">
+            <li class="events-group" @if ((int)DateTime.Now.DayOfWeek - 1 == 1) { @Html.Raw("style=\"background-color:#ffb;\"") }>
                 <div class="top-info"><span>Wtorek</span></div>
                 <ul class="event-ul">
                     @foreach (var z in Model.Zajecias.Where(x => x.dzien == 1).ToList())
                     {
-                        <li class="single-event" data-start="@z.godzinaod" data-end="@z.godzinado" data-content="@Url.Action("Sszczegoly", new { id = z.id })" data-event="@z.rodzaj.ToLower().Replace('ć','c').Replace('ł','l')">
+                        if (Request.Cookies.AllKeys.ToList().Where(x => x.Equals("hide.s." + z.planid.ToString() + "." + z.id.ToString())).Count() > 0 && ViewBag.unhide == null) { continue; }
+                        <li id="@z.id.ToString()" class="single-event" data-start="@z.godzinaod" data-end="@z.godzinado" data-content="@Url.Action("Sszczegoly", new { id = z.id })" data-event="@z.rodzaj.ToLower().Replace('ć','c').Replace('ł','l')">
                             <a id="block" style="text-decoration:none" href="#0">
                                 <em class="event-name">@z.nazwa</em>
                                 <em>@z.rodzaj@if (z.info != null && z.info != "")
@@ -53,12 +81,13 @@
                     }
                 </ul>
             </li>
-            <li class="events-group">
+            <li class="events-group" @if ((int)DateTime.Now.DayOfWeek - 1 == 2) { @Html.Raw("style=\"background-color:#ffb;\"") }>
                 <div class="top-info"><span>Środa</span></div>
                 <ul class="event-ul">
                     @foreach (var z in Model.Zajecias.Where(x => x.dzien == 2).ToList())
                     {
-                        <li class="single-event" data-start="@z.godzinaod" data-end="@z.godzinado" data-content="@Url.Action("Sszczegoly", new { id = z.id })" data-event="@z.rodzaj.ToLower().Replace('ć','c').Replace('ł','l')">
+                        if (Request.Cookies.AllKeys.ToList().Where(x => x.Equals("hide.s." + z.planid.ToString() + "." + z.id.ToString())).Count() > 0 && ViewBag.unhide == null) { continue; }
+                        <li id="@z.id.ToString()" class="single-event" data-start="@z.godzinaod" data-end="@z.godzinado" data-content="@Url.Action("Sszczegoly", new { id = z.id })" data-event="@z.rodzaj.ToLower().Replace('ć','c').Replace('ł','l')">
                             <a id="block" style="text-decoration:none" href="#0">
                                 <em class="event-name">@z.nazwa</em>
                                 <em>@z.rodzaj@if (z.info != null && z.info != "")
@@ -68,12 +97,13 @@
                     }
                 </ul>
             </li>
-            <li class="events-group">
+            <li class="events-group" @if ((int)DateTime.Now.DayOfWeek - 1 == 3) { @Html.Raw("style=\"background-color:#ffb;\"") }>
                 <div class="top-info"><span>Czwartek</span></div>
                 <ul class="event-ul">
                     @foreach (var z in Model.Zajecias.Where(x => x.dzien == 3).ToList())
                     {
-                        <li class="single-event" data-start="@z.godzinaod" data-end="@z.godzinado" data-content="@Url.Action("Sszczegoly", new { id = z.id })" data-event="@z.rodzaj.ToLower().Replace('ć','c').Replace('ł','l')">
+                        if (Request.Cookies.AllKeys.ToList().Where(x => x.Equals("hide.s." + z.planid.ToString() + "." + z.id.ToString())).Count() > 0 && ViewBag.unhide == null) { continue; }
+                        <li id="@z.id.ToString()" class="single-event" data-start="@z.godzinaod" data-end="@z.godzinado" data-content="@Url.Action("Sszczegoly", new { id = z.id })" data-event="@z.rodzaj.ToLower().Replace('ć','c').Replace('ł','l')">
                             <a id="block" style="text-decoration:none" href="#0">
                                 <em class="event-name">@z.nazwa</em>
                                 <em>@z.rodzaj@if (z.info != null && z.info != "")
@@ -83,12 +113,13 @@
                     }
                 </ul>
             </li>
-            <li class="events-group">
+            <li class="events-group" @if ((int)DateTime.Now.DayOfWeek - 1 == 4) { @Html.Raw("style=\"background-color:#ffb;\"") }>
                 <div class="top-info"><span>Piątek</span></div>
                 <ul class="event-ul">
                     @foreach (var z in Model.Zajecias.Where(x => x.dzien == 4).ToList())
                     {
-                        <li class="single-event" data-start="@z.godzinaod" data-end="@z.godzinado" data-content="@Url.Action("Sszczegoly", new { id = z.id })" data-event="@z.rodzaj.ToLower().Replace('ć','c').Replace('ł','l')">
+                        if (Request.Cookies.AllKeys.ToList().Where(x => x.Equals("hide.s." + z.planid.ToString() + "." + z.id.ToString())).Count() > 0 && ViewBag.unhide == null) { continue; }
+                        <li id="@z.id.ToString()" class="single-event" data-start="@z.godzinaod" data-end="@z.godzinado" data-content="@Url.Action("Sszczegoly", new { id = z.id })" data-event="@z.rodzaj.ToLower().Replace('ć','c').Replace('ł','l')">
                             <a id="block" style="text-decoration:none" href="#0">
                                 <em class="event-name">@z.nazwa</em>
                                 <em>@z.rodzaj@if (z.info != null && z.info != "")
@@ -170,7 +201,7 @@
                     this.placeEvents();
                     this.element.hasClass('modal-is-open') && this.checkEventModal();
                     var planheight = $('.timeline-ul').height();
-                    @if (!ViewBag.normal) { @Html.Raw("planheight = " + ViewBag.height + ";") }
+                    @if (!ViewBag.normal || ViewBag.onlyblock) { @Html.Raw("planheight = " + ViewBag.height + ";") }
                     $('.event-ul').height(planheight);
                 } else if (mq == 'mobile' && this.element.hasClass('js-full')) {
                     //in this case you are on a mobile version (first load or resize from desktop)
@@ -217,7 +248,7 @@
                 var ttop = 0;
                 var dzien;
                 this.singleEvents.each(function () {
-                    if ('true'=='@Html.Raw(ViewBag.normal==true?"true":"false")') {
+                    if ('true'=='@Html.Raw(ViewBag.normal==true&&ViewBag.onlyblock==false?"true":"false")') {
                         //place each event in the grid -> need to set top position and height
                         var start = getScheduleTimestamp($(this).attr('data-start')),
                     	    duration = getScheduleTimestamp($(this).attr('data-end')) - start;
@@ -590,7 +621,7 @@
             color: #eee;
         }
     </style>
-    @if (!ViewBag.normal)
+    @if (!ViewBag.normal || ViewBag.onlyblock)
     {
         <style>
             .cd-schedule .timeline li span {

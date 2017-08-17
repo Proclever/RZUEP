@@ -16,7 +16,7 @@
 <p><h4 style="text-align:center;color:#333;margin-top:20px">Co możemy Ci zaoferować?</h4></p>
 
 <p>
-    • Wybór aktualnych oraz archiwalnych planów zajęć z opcją zapamiętania ich na Twojej liście.<br />
+    • Wybór aktualnych i archiwalnych planów zajęć z opcją zapamiętania ich na Twojej liście.<br />
     • Szybki podgląd na aktualnie trwające oraz kolejne zajęcia.<br />
     • Intuicyjny widok rozkładu zajęć, zachowujacy przejrzystość również na urządzeniach mobilnych.<br />
     • Dostęp do danych szczegółowych poszczególnych zajęć, takich jak grupy wydziałowe (dla pracowników) czy informacje o prowadzących oraz ich konsultacjach (dla studentów). Wystarczy kliknąć w interesujacy Cię blok.<br />
@@ -38,7 +38,7 @@
 
 @if (ViewBag.returnurl!=null && ViewBag.returnurl.Split('?')[0] != HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[0])
 {
-    <p style="text-align:center"><a style="margin:20px;" class="btn btn-primary btn-lg" href="@ViewBag.returnurl" role="button">Powrót</a></p>
+    <p style="text-align:center"><a style="margin:20px;" class="btn btn-primary btn-lg" href="@ViewBag.returnurl.Replace(":"+HttpContext.Current.Request.Url.Port, "")" role="button">Powrót</a></p>
 }
 
 <hr />

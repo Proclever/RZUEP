@@ -10,7 +10,7 @@
 <hr />
 
 <h4>Dlaczego w niektórych planach bloki układają się według godzin i czasu trwania zajęć, a w niektórych są jednolite?</h4>
-<p style="text-align:justify">W przypadku planów zawierających bloki zajęć, których czas trwania się pokrywa, układ przyjmuje postać jednolitych bloków, niezależnych od godzin rozpoczęcia i zakończenia zajęć tak, aby bloki na siebie nie nachodziły.</p>
+<p style="text-align:justify">W przypadku planów zawierających bloki zajęć, których czas trwania się pokrywa, układ przyjmuje postać jednolitych bloków, niezależnych od godzin rozpoczęcia i zakończenia zajęć tak, aby bloki na siebie nie nachodziły. Ten układ jest dostępny również dla rozkładów zajęć o domyślnym układzie czasowym.</p>
 <br />
 <h4>Dlaczego plan znika z mojej listy lub w ogóle nie mogę go dodać?</h4>
 <p style="text-align:justify">Lista planów korzysta z plików cookies i jest przypisana do wykorzystywanej przeglądarki internetowej, a więc jeżeli korzystasz ze strony na innej przeglądarce/urządzeniu, musisz na nim ponownie dodać wybrany plan. Jeżeli korzystasz z tej samej przeglądarki i plan został usunięty poza Twoją kontrolą, to znaczy, że pliki cookies zostały usunięte - jeżeli Twoja przeglądarka robi to automatycznie, należy zmienić tą opcję w ustawieniach - tak samo w przypadku, gdy plan w ogóle się nie zapisuje, ponieważ pliki cookies nie są wtedy w ogóle zapisywane.</p>
@@ -20,7 +20,7 @@
 
 @if (ViewBag.returnurl != null && ViewBag.returnurl.Split('?')[0] != HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[0])
 {
-    <p style="text-align:center"><a style="margin:20px;" class="btn btn-primary btn-lg" href="@ViewBag.returnurl" role="button">Powrót</a></p>
+    <p style="text-align:center"><a style="margin:20px;" class="btn btn-primary btn-lg" href="@ViewBag.returnurl.Replace(":"+HttpContext.Current.Request.Url.Port, "")" role="button">Powrót</a></p>
 }
 
 <hr />

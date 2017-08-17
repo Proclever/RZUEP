@@ -194,11 +194,68 @@ namespace RZUEP.Controllers
             return View(db.Proprowadzacies.Find(id));
         }
 
-        public ActionResult PlanPracownika(int id)
+        public ActionResult PlanPracownika(int id, bool? onlyblock = null, int? idtohide = null, bool unhide = false)
         {
             var pracownik = db.Proprowadzacies.Find(id);
             if (pracownik.Prozajecias.Count == 0) RedirectToAction("Pracownik", new { id = id });
             List<string> timelist = new List<string>();
+            if(idtohide!=null)
+            {
+                HttpCookie cookie = new HttpCookie("hide.p." + id.ToString() + "." + idtohide.ToString());
+                cookie.Expires = DateTime.Now.AddMonths(5);
+                cookie.Value = null;
+                Response.Cookies.Add(cookie);
+            }
+            if(unhide)
+            {
+                foreach(var h in Request.Cookies.AllKeys.ToList().Where(x => x.Contains("hide.p.")).ToList())
+                {
+                    if (h.Split('.')[2] != id.ToString()) continue;
+                    else
+                    {
+                        if (Request.Cookies[h] != null)
+                        {
+                            var c = new HttpCookie(h)
+                            {
+                                Expires = DateTime.Now.AddDays(-1),
+                                Value = null
+                            };
+                            Response.Cookies.Add(c);
+                        }
+                    }
+                }
+                ViewBag.unhide = true;
+            }
+            ViewBag.onlyblock = null;
+            if (onlyblock != null)
+            {
+                if (onlyblock.Value)
+                {
+                    HttpCookie cookie = new HttpCookie("onlyblock.p." + id.ToString());
+                    cookie.Expires = DateTime.Now.AddMonths(5);
+                    cookie.Value = null;
+                    Response.Cookies.Add(cookie);
+                }
+                else
+                {
+                    if (Request.Cookies["onlyblock.p." + id.ToString()] != null)
+                    {
+                        var ob = new HttpCookie("onlyblock.p." + id.ToString())
+                        {
+                            Expires = DateTime.Now.AddDays(-1),
+                            Value = null
+                        };
+                        Response.Cookies.Add(ob);
+                        ViewBag.onlyblock = false;
+                    }
+                }
+            }
+            
+            if (ViewBag.onlyblock == null)
+            {
+                if(Request.Cookies.AllKeys.ToList().Where(x => x.Equals("onlyblock.p." + id.ToString())).Count() > 0) ViewBag.onlyblock = true;
+                else ViewBag.onlyblock = false;
+            }
             bool normal = true;
             int maxzajecias = 0;
             for (int j = 0; j < 5; j++)
@@ -207,6 +264,7 @@ namespace RZUEP.Controllers
                 Prozajecias poprzednie = null;
                 foreach (var z in pracownik.Prozajecias.Where(x => x.dzien == j).OrderBy(x => x.godzinaod).ToList())
                 {
+                    if (Request.Cookies.AllKeys.ToList().Where(x => x.Equals("hide.p." + z.proprowadzacyid.ToString() + "." + z.id.ToString())).Count() > 0 && ViewBag.unhide == null) { continue; }
                     if (poprzednie == null) poprzednie = z;
                     else
                     {
@@ -219,7 +277,7 @@ namespace RZUEP.Controllers
                     }
                 }
             }
-            if (!normal)
+            if (!normal || ViewBag.onlyblock)
             {
                 ViewBag.height = ((110 * maxzajecias) - 10).ToString();
                 goto end;
@@ -247,6 +305,7 @@ namespace RZUEP.Controllers
             end:
             ViewBag.timelist = timelist;
             ViewBag.normal = normal;
+            
             ViewBag.aktualizacja = GlobalVariables.Aktualizacja;
             return View(pracownik);
         }
@@ -382,12 +441,68 @@ namespace RZUEP.Controllers
             return View(db.Plans.Find(id));
         }
 
-        public ActionResult PlanStudenta(int id)
+        public ActionResult PlanStudenta(int id, bool? onlyblock = null, int? idtohide = null, bool unhide = false)
         {
             var student = db.Plans.Find(id);
             if (student.Zajecias.Count == 0) RedirectToAction("Student", new { id = id });
             List<string> timelist = new List<string>();
+            if (idtohide != null)
+            {
+                HttpCookie cookie = new HttpCookie("hide.s." + id.ToString() + "." + idtohide.ToString());
+                cookie.Expires = DateTime.Now.AddMonths(5);
+                cookie.Value = null;
+                Response.Cookies.Add(cookie);
+            }
+            if (unhide)
+            {
+                foreach (var h in Request.Cookies.AllKeys.ToList().Where(x => x.Contains("hide.s.")).ToList())
+                {
+                    if (h.Split('.')[2] != id.ToString()) continue;
+                    else
+                    {
+                        if (Request.Cookies[h] != null)
+                        {
+                            var c = new HttpCookie(h)
+                            {
+                                Expires = DateTime.Now.AddDays(-1),
+                                Value = null
+                            };
+                            Response.Cookies.Add(c);
+                        }
+                    }
+                }
+                ViewBag.unhide = true;
+            }
             bool normal = true;
+            ViewBag.onlyblock = null;
+            if (onlyblock != null)
+            {
+                if (onlyblock.Value)
+                {
+                    HttpCookie cookie = new HttpCookie("onlyblock.s." + id.ToString());
+                    cookie.Expires = DateTime.Now.AddMonths(12);
+                    cookie.Value = null;
+                    Response.Cookies.Add(cookie);
+                }
+                else
+                {
+                    if (Request.Cookies["onlyblock.s." + id.ToString()] != null)
+                    {
+                        var ob = new HttpCookie("onlyblock.s." + id.ToString())
+                        {
+                            Expires = DateTime.Now.AddDays(-1),
+                            Value = null
+                        };
+                        Response.Cookies.Add(ob);
+                        ViewBag.onlyblock = false;
+                    }
+                }
+            }
+            if (ViewBag.onlyblock == null)
+            {
+                if(Request.Cookies.AllKeys.ToList().Where(x => x.Equals("onlyblock.s." + id.ToString())).Count() > 0) ViewBag.onlyblock = true;
+                else ViewBag.onlyblock = false;
+            }
             int maxzajecias = 0;
             for (int j = 0; j < 5; j++)
             {
@@ -395,6 +510,7 @@ namespace RZUEP.Controllers
                 Zajecias poprzednie = null;
                 foreach (var z in student.Zajecias.Where(x => x.dzien == j).OrderBy(x => x.godzinaod).ToList())
                 {
+                    if (Request.Cookies.AllKeys.ToList().Where(x => x.Equals("hide.s." + z.planid.ToString() + "." + z.id.ToString())).Count() > 0 && ViewBag.unhide == null) { continue; }
                     if (poprzednie == null) poprzednie = z;
                     else
                     {
@@ -407,7 +523,7 @@ namespace RZUEP.Controllers
                     }
                 }
             }
-            if (!normal)
+            if (!normal || ViewBag.onlyblock)
             {
                 ViewBag.height = ((110 * maxzajecias) - 10).ToString();
                 goto end;
@@ -435,6 +551,7 @@ namespace RZUEP.Controllers
             end:
             ViewBag.timelist = timelist;
             ViewBag.normal = normal;
+            
             ViewBag.aktualizacja = GlobalVariables.Aktualizacja;
             return View(student);
         }
@@ -481,18 +598,19 @@ namespace RZUEP.Controllers
                 var zajecia = db.Proprowadzacies.Find(id).Prozajecias.Where(x => x.dzien == dzien).OrderBy(x => x.godzinaod).ToList();
                 foreach (var z in zajecia)
                 {
+                    if (Request.Cookies.AllKeys.ToList().Where(x => x.Equals("hide.p." + z.proprowadzacyid.ToString() + "." + z.id.ToString())).Count() > 0) continue;
                     TimeSpan god = new TimeSpan(int.Parse(z.godzinaod.Split(':')[0]), int.Parse(z.godzinaod.Split(':')[1]), 0);
                     TimeSpan gdo = new TimeSpan(int.Parse(z.godzinado.Split(':')[0]), int.Parse(z.godzinado.Split(':')[1]), 0);
                     if (int.Parse(god.TotalMinutes.ToString("0")) == int.Parse(godzina.TotalMinutes.ToString("0")))
                     {
-                        obecnie = "Rozpoczyna się " + z.rodzaj.ToLower() + " " + z.nazwa + (z.sala.Contains("armonogram") ? "" : (" w sali " + z.sala.Replace("Sala ", "").Replace("sala ", "")));
+                        obecnie = "Rozpoczyna" + (z.rodzaj.ToLower()[z.rodzaj.ToLower().Length - 1] == 'a' ? "ją" : "") + " się " + z.rodzaj.ToLower() + " " + z.nazwa + (z.sala.Contains("armonogram") ? "" : (" w sali " + z.sala.Replace("Sala ", "").Replace("sala ", "")));
                         obezaj = z;
                         if (obezaj.info != "" && obezaj.info != null) onormal = false;
                         continue;
                     }
                     if (int.Parse(godzina.TotalMinutes.ToString("0")) > int.Parse(god.TotalMinutes.ToString("0")) && int.Parse(godzina.TotalMinutes.ToString("0")) < int.Parse(gdo.TotalMinutes.ToString("0")))
                     {
-                        obecnie = "Trwa " + z.rodzaj.ToLower() + " " + z.nazwa + (z.sala.Contains("armonogram") ? "" : (" w sali " + z.sala.Replace("Sala ", "").Replace("sala ", "")) + " ");
+                        obecnie = "Trwa" + (z.rodzaj.ToLower()[z.rodzaj.ToLower().Length - 1] == 'a' ? "ją " : " ") + z.rodzaj.ToLower() + " " + z.nazwa + (z.sala.Contains("armonogram") ? "" : (" w sali " + z.sala.Replace("Sala ", "").Replace("sala ", "")) + " ");
                         if ((godzina - god).TotalMinutes < (gdo - godzina).TotalMinutes) obecnie += " (od " + (godzina - god).TotalMinutes.ToString("0") + " min.)";
                         else obecnie += " (jeszcze " + (gdo - godzina).TotalMinutes.ToString("0") + " min.)";
                         obezaj = z;
@@ -516,7 +634,18 @@ namespace RZUEP.Controllers
                     {
                         var zaj = db.Proprowadzacies.Find(id).Prozajecias.Where(x => x.dzien == dzien2).OrderBy(x => x.godzinaod).ToList();
                         if (zaj.Count == 0) dzien2 = (dzien2 + 1)%5;
-                        else nastzaj = zaj.First();
+                        else
+                        {
+                            foreach(var zzz in zaj)
+                            {
+                                if (Request.Cookies.AllKeys.ToList().Where(x => x.Equals("hide.p." + zzz.proprowadzacyid.ToString() + "." + zzz.id.ToString())).Count() > 0) continue;
+                                else
+                                {
+                                    nastzaj = zzz;
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
                 if (nastzaj != null)
@@ -569,6 +698,7 @@ namespace RZUEP.Controllers
                         bool found = false;
                         foreach (var z in db.Proprowadzacies.Find(id).Prozajecias.Where(x => x.dzien == nastzaj.dzien).OrderBy(x => x.godzinaod).ToList())
                         {
+                            if (Request.Cookies.AllKeys.ToList().Where(x => x.Equals("hide.p." + z.proprowadzacyid.ToString() + "." + z.id.ToString())).Count() > 0) continue;
                             if (found)
                             {
                                 if (new TimeSpan(int.Parse(z.godzinaod.Split(':')[0]), int.Parse(z.godzinaod.Split(':')[1]), 0) < new TimeSpan(int.Parse(nastzaj.godzinado.Split(':')[0]), int.Parse(nastzaj.godzinado.Split(':')[1]), 0)) nnormal = false;
@@ -589,18 +719,19 @@ namespace RZUEP.Controllers
                 var zajecia = db.Plans.Find(id).Zajecias.Where(x => x.dzien == dzien).OrderBy(x => x.godzinaod).ToList();
                 foreach (var z in zajecia)
                 {
+                    if (Request.Cookies.AllKeys.ToList().Where(x => x.Equals("hide.s." + z.planid.ToString() + "." + z.id.ToString())).Count() > 0) continue;
                     TimeSpan god = new TimeSpan(int.Parse(z.godzinaod.Split(':')[0]), int.Parse(z.godzinaod.Split(':')[1]), 0);
                     TimeSpan gdo = new TimeSpan(int.Parse(z.godzinado.Split(':')[0]), int.Parse(z.godzinado.Split(':')[1]), 0);
                     if (int.Parse(god.TotalMinutes.ToString("0")) == int.Parse(godzina.TotalMinutes.ToString("0")))
                     {
-                        obecnie = "Rozpoczyna się " + z.rodzaj.ToLower() + " " + z.nazwa + (z.sala.Contains("armonogram") ? "" : (" w sali " + z.sala.Replace("Sala ", "").Replace("sala ", "")));
+                        obecnie = "Rozpoczyna" + (z.rodzaj.ToLower()[z.rodzaj.ToLower().Length - 1] == 'a' ? "ją" : "") + " się " + z.rodzaj.ToLower() + " " + z.nazwa + (z.sala.Contains("armonogram") ? "" : (" w sali " + z.sala.Replace("Sala ", "").Replace("sala ", "")));
                         obezaj = z;
                         if (obezaj.info != "" && obezaj.info != null) onormal = false;
                         continue;
                     }
                     if (int.Parse(godzina.TotalMinutes.ToString("0")) > int.Parse(god.TotalMinutes.ToString("0")) && int.Parse(godzina.TotalMinutes.ToString("0")) < int.Parse(gdo.TotalMinutes.ToString("0")))
                     {
-                        obecnie = "Trwa " + z.rodzaj.ToLower() + " " + z.nazwa + (z.sala.Contains("armonogram") ? "" : (" w sali " + z.sala.Replace("Sala ", "").Replace("sala ", "")) + " ");
+                        obecnie = "Trwa" + (z.rodzaj.ToLower()[z.rodzaj.ToLower().Length-1]=='a'?"ją ": " ") + z.rodzaj.ToLower() + " " + z.nazwa + (z.sala.Contains("armonogram") ? "" : (" w sali " + z.sala.Replace("Sala ", "").Replace("sala ", "")) + " ");
                         if ((godzina - god).TotalMinutes < (gdo - godzina).TotalMinutes) obecnie += " (od " + (godzina - god).TotalMinutes.ToString("0") + " min.)";
                         else obecnie += " (jeszcze " + (gdo - godzina).TotalMinutes.ToString("0") + " min.)";
                         obezaj = z;
@@ -624,12 +755,23 @@ namespace RZUEP.Controllers
                     {
                         var zaj = db.Plans.Find(id).Zajecias.Where(x => x.dzien == dzien2).OrderBy(x => x.godzinaod).ToList();
                         if (zaj.Count == 0) dzien2 = (dzien2 + 1) % 5;
-                        else nastzaj = zaj.First();
+                        else
+                        {
+                            foreach (var zzz in zaj)
+                            {
+                                if (Request.Cookies.AllKeys.ToList().Where(x => x.Equals("hide.s." + zzz.planid.ToString() + "." + zzz.id.ToString())).Count() > 0) continue;
+                                else
+                                {
+                                    nastzaj = zzz;
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
                 if (nastzaj != null)
                 {
-                    nastepne = "Następne zajęcia to " + nastzaj.rodzaj.ToLower() + " " + nastzaj.nazwa + " " + (nastzaj.sala.Contains("armonogram") ? "" : (" w sali " + nastzaj.sala)) + " ";
+                    nastepne = "Następne zajęcia to " + nastzaj.rodzaj.ToLower() + " " + nastzaj.nazwa + " " + (nastzaj.sala.Contains("armonogram") ? "" : (" w sali " + nastzaj.sala.Replace("Sala ", "").Replace("sala ", ""))) + " ";
                     TimeSpan god = new TimeSpan(int.Parse(nastzaj.godzinaod.Split(':')[0]), int.Parse(nastzaj.godzinaod.Split(':')[1]), 0);
                     if (nastzaj.dzien == dzien && god > godzina)
                     {
@@ -677,6 +819,7 @@ namespace RZUEP.Controllers
                         bool found = false;
                         foreach (var z in db.Plans.Find(id).Zajecias.Where(x => x.dzien == nastzaj.dzien).OrderBy(x => x.godzinaod).ToList())
                         {
+                            if (Request.Cookies.AllKeys.ToList().Where(x => x.Equals("hide.s." + z.planid.ToString() + "." + z.id.ToString())).Count() > 0) continue;
                             if (found)
                             {
                                 if (new TimeSpan(int.Parse(z.godzinaod.Split(':')[0]), int.Parse(z.godzinaod.Split(':')[1]), 0) < new TimeSpan(int.Parse(nastzaj.godzinado.Split(':')[0]), int.Parse(nastzaj.godzinado.Split(':')[1]), 0)) nnormal = false;
