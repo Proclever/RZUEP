@@ -40,8 +40,15 @@ namespace RZUEP.Controllers
             }
             return View(Request.Cookies.AllKeys.ToList().Where(x => x.Contains("Plan_")).ToList());
         }
-        public ActionResult Info(string returnurl = null)
+        public ActionResult Info(string returnurl = null, bool mobileinfo = false)
         {
+            if(mobileinfo)
+            {
+                HttpCookie cookie = new HttpCookie("closemobileinfo");
+                cookie.Expires = DateTime.Now.AddMonths(12);
+                cookie.Value = "true";
+                Response.Cookies.Add(cookie);
+            }
             ViewBag.returnurl = returnurl;
             return View();
         }
