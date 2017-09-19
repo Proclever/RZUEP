@@ -92,7 +92,7 @@
             data-divlink="#FFF">
     </script>
     <script>
-        if (window.screen.width <= 760 && getCookie("closemobileinfo") != "true") {
+        if (window.screen.width <= 760 && document.cookie.indexOf("closemobileinfo=true") == -1) {
             $("#mobileinfo").show();
         }
         $("#closemobileinfo").click(function () {

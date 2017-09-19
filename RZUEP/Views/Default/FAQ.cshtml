@@ -15,7 +15,7 @@
 <h4>Dlaczego plan znika z mojej listy lub w ogóle nie mogę go dodać?</h4>
 <p style="text-align:justify">Lista planów korzysta z plików cookies i jest przypisana do wykorzystywanej przeglądarki internetowej, a więc jeżeli korzystasz ze strony na innej przeglądarce/urządzeniu, musisz na nim ponownie dodać wybrany plan. Jeżeli korzystasz z tej samej przeglądarki i plan został usunięty poza Twoją kontrolą, to znaczy, że pliki cookies zostały usunięte - jeżeli Twoja przeglądarka robi to automatycznie, należy zmienić tą opcję w ustawieniach - tak samo w przypadku, gdy plan w ogóle się nie zapisuje, ponieważ pliki cookies nie są wtedy w ogóle zapisywane.</p>
 <br />
-<h4>Dlaczego strona ciągle mi się łąduje i widzę napis "Proszę czekać..."?</h4>
+<h4>Dlaczego strona ciągle mi się ładuje i widzę napis "Proszę czekać..."?</h4>
 <p style="text-align:justify">Wskazuje to na przerwanie połączenia sieciowego lub korzystanie z funkcji blokowania skryptów na stronie.</p>
 
 @if (ViewBag.returnurl != null && ViewBag.returnurl.Split('?')[0] != HttpContext.Current.Request.Url.AbsoluteUri.Split('?')[0])
@@ -29,9 +29,3 @@
 <p style="text-align:center">
     Wszystkie pytania, uwagi oraz opinie prosimy o przesłanie na adres<br><a href="mailto:kontakt@proclever.pl">kontakt@proclever.pl</a>
 </p>
-
-@section scripts {
-    <script>
-        alert(window.screen.width + " - " + window.screen.availWidth + " - " + $(window).width());
-    </script>
-}
