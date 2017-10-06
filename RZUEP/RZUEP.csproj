@@ -172,6 +172,7 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="images\700x366asap.png" />
     <Content Include="images\EnactusUEP_logo.jpg" />
     <Content Include="images\icon180.png" />
     <Content Include="images\icon192.png" />
