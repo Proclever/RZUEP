@@ -66,7 +66,6 @@
 </head>
 <body>
     <div style="display:none"><img src="@Url.Content("~/images/uep512.png")" /></div>
-    <div style="display:none"><img src="@Url.Content("~/images/fblinkimage.png")" /></div>
     <div id="mobileinfo" style="display:none;margin:0px;padding:5px;background-color: #ddd;width: 100%;border-bottom:1px solid #ccc"><span id="closemobileinfo" style="float:right;">✕</span><h4 style="text-align:center">📱 Przeglądasz mobilnie? @Html.ActionLink("Sprawdź jak korzystać ze strony jak z aplikacji!", "Info", null, null, null, "mobile", new { returnurl = HttpContext.Current.Request.Url.AbsoluteUri, mobileinfo = true }, new { @style = "color:#337ab7;" })</h4></div>
     <div class="container body-content">
         @RenderBody()
