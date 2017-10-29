@@ -596,8 +596,8 @@ namespace RZUEP.Controllers
             bool onormal = true;
             string nastepne = "";
             bool nnormal = true;
-            var dzien = (int)DateTime.Now.AddHours(2).DayOfWeek - 1;
-            var godzina = DateTime.Now.AddHours(2).TimeOfDay;
+            var dzien = (int)DateTime.Now.AddHours(1).DayOfWeek - 1;
+            var godzina = DateTime.Now.AddHours(1).TimeOfDay;
             if (pracownik)
             {
                 Prozajecias obezaj = null;
