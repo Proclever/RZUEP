@@ -15,17 +15,17 @@
 {
     <div class="jumbotron" style="margin: 0 auto;margin-top:15px;max-width:900px;padding:10px;">
         <p style="text-align:center">Oto widok pełnego rozkładu zajęć.<br>Kliknij w interesujący Cię blok, aby przejść do szczegółowych informacji oraz opcji.</p>
-        <p style="text-align:center">Zobacz także <a style="color:#337ab7;" href="@Url.Action("Info", new { returnurl = HttpContext.Current.Request.Url.AbsoluteUri })">jak korzystać ze strony jak z aplikacji mobilnej i przeglądać swój plan offline</a>.</p>
+        <!--<p style="text-align:center">Zobacz także <a style="color:#337ab7;" href="@Url.Action("Info", new { returnurl = HttpContext.Current.Request.Url.AbsoluteUri })">jak korzystać ze strony jak z aplikacji mobilnej i przeglądać swój plan offline</a>.</p>-->
     </div>
 }
 <p style="text-align:center">
     @if (ViewBag.normal && !ViewBag.onlyblock)
     {
-        <a style="margin:10px;" class="btn btn-default btn-sm" href="@Url.Action("PlanStudenta", new { id = Model.id, onlyblock = true })" role="button">Zmień układ na blokowy</a>
+        <a style="margin:10px;" class="btn btn-default btn-sm blockmode" href="@Url.Action("PlanStudenta", new { id = Model.id, onlyblock = true })" role="button">Zmień układ na blokowy</a>
     }
     @if (ViewBag.normal && ViewBag.onlyblock)
     {
-        <a style="margin:10px;" class="btn btn-default btn-sm" href="@Url.Action("PlanStudenta", new { id = Model.id, onlyblock = false })" role="button">Zmień układ na czasowy</a>
+        <a style="margin:10px;" class="btn btn-default btn-sm blockmode" href="@Url.Action("PlanStudenta", new { id = Model.id, onlyblock = false })" role="button">Zmień układ na czasowy</a>
     }
     @if (Request.Cookies.AllKeys.ToList().Where(x => x.Contains("hide.s." + Model.id.ToString() + ".")).Count() > 0 && ViewBag.unhide == null)
     {
@@ -595,6 +595,7 @@
                     $(this).parent().show();
                 });
                 Checkheight();
+                $(".blockmode").show();
             }
             else {
                 $(".event-ul").each(function () {
@@ -607,6 +608,15 @@
                         $(this).css("font-size", "");
                     });
                 });
+                $(".blockmode").hide();
+            }
+        });
+        $(function () {
+            if ($(window).width() < 800) {
+                $(".blockmode").hide();
+            }
+            else {
+                $(".blockmode").show();
             }
         });
     </script>
