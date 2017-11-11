@@ -67,11 +67,12 @@
 <body>
     <div style="display:none"><img src="@Url.Content("~/images/uep512.png")" /></div>
     <div id="mobileinfo" style="display:none;margin:0px;padding:5px;background-color: #ddd;width: 100%;border-bottom:1px solid #ccc"><span id="closemobileinfo" style="float:right;">✕</span><h4 style="text-align:center">📱 Przeglądasz mobilnie? @Html.ActionLink("Sprawdź jak korzystać ze strony jak z aplikacji!", "Info", null, null, null, "mobile", new { returnurl = HttpContext.Current.Request.Url.AbsoluteUri, mobileinfo = true }, new { @style = "color:#337ab7;" })</h4></div>
+    <div id="androidinfo" style="display:none;margin:0px;padding:5px;background-color: #ddd;width: 100%;border-bottom:1px solid #ccc"><span id="closeandroidinfo" style="float:right;">✕</span><h4 style="text-align:center">📱 Korzystasz z Androida? <a style="color:#337ab7" href="https://play.google.com/store/apps/details?id=pl.proclever.rozkadzajuep&rdid=pl.proclever.rozkadzajuep">Pobierz aplikację i korzystaj wygodniej!</a></h4></div>
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p style="text-align:center">@Html.ActionLink("Plany", "Index", null, new { @style = "color:#337ab7;" }) | @Html.ActionLink("Info", "Info", new { returnurl = HttpContext.Current.Request.Url.AbsoluteUri }, new { @style = "color:#337ab7;" }) | @Html.ActionLink("FAQ", "FAQ", new { returnurl = HttpContext.Current.Request.Url.AbsoluteUri }, new { @style = "color:#337ab7;" })</p>
+            <p style="text-align:center">@Html.ActionLink("Plany", "Index", null, new { @style = "color:#337ab7;" }) | @Html.ActionLink("Info", "Info", new { returnurl = HttpContext.Current.Request.Url.AbsoluteUri }, new { @style = "color:#337ab7;" }) | @Html.ActionLink("FAQ", "FAQ", new { returnurl = HttpContext.Current.Request.Url.AbsoluteUri }, new { @style = "color:#337ab7;" }) | <a href="https://play.google.com/store/apps/details?id=pl.proclever.rozkadzajuep&rdid=pl.proclever.rozkadzajuep"><img src="@Url.Content("~/images/android.png")" width="15" height="15" alt="Android" /></a></p>
             <p style="text-align:center">RZUEP &copy; @DateTime.Now.Year</p>
             <p style="text-align:center;margin-bottom:10px;">Utworzone dzięki <a href="http://proclever.pl/"><img src="@Url.Content("~/images/proclever14.png")" alt="PROCLEVER" /></a></p>
         </footer>
@@ -95,12 +96,28 @@
         if (window.screen.width <= 760 && document.cookie.indexOf("closemobileinfo=true") == -1) {
             $("#mobileinfo").show();
         }
+
+        var ua = navigator.userAgent.toLowerCase();
+        var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+        if (isAndroid && document.cookie.indexOf("closeandroidinfo=true") == -1) {
+            $("#mobileinfo").hide();
+            $("#androidinfo").show();
+        }
+
         $("#closemobileinfo").click(function () {
             $("#mobileinfo").hide();
             var d = new Date();
             d.setTime(d.getTime() + (360*24*60*60*1000));
             var expires = "expires="+ d.toUTCString();
             document.cookie = "closemobileinfo=true;" + expires + ";path=/";
+        });
+
+        $("#closeandroidinfo").click(function () {
+            $("#androidinfo").hide();
+            var d = new Date();
+            d.setTime(d.getTime() + (360 * 24 * 60 * 60 * 1000));
+            var expires = "expires=" + d.toUTCString();
+            document.cookie = "closeandroidinfo=true;" + expires + ";path=/";
         });
     </script>
 </body>
