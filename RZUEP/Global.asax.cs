@@ -25,7 +25,7 @@ namespace RZUEP
             try
             {
                 WebClient http = new WebClient();
-                string Result = http.DownloadString(HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority);
+                string Result = http.DownloadString(HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority.Split(':')[0]);
             }
             catch (Exception ex)
             {

@@ -16,7 +16,7 @@ namespace RZUEP.Controllers
 
         public string GetHost()
         {
-            return System.Web.HttpContext.Current.Request.Url.Scheme + "://" + System.Web.HttpContext.Current.Request.Url.Authority;
+            return System.Web.HttpContext.Current.Request.Url.Scheme + "://" + System.Web.HttpContext.Current.Request.Url.Authority.Split(':')[0];
         }
 
         public ActionResult Index()
