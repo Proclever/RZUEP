@@ -13,6 +13,12 @@ namespace RZUEP.Controllers
     {
         private RZUEPDefaultModel db = new RZUEPDefaultModel();
         // GET: Default
+
+        public string GetHost()
+        {
+            return System.Web.HttpContext.Current.Request.Url.Scheme + "://" + System.Web.HttpContext.Current.Request.Url.Authority;
+        }
+
         public ActionResult Index()
         {
             foreach (var c in Request.Cookies.AllKeys.ToList().Where(x => x.Contains("Plan_")).ToList())
