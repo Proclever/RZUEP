@@ -13,7 +13,7 @@ namespace RZUEP_Redirector
         {
             UriBuilder uri = new UriBuilder(Context.Request.Url);
             uri.Scheme = "http";
-            Response.Redirect(uri.ToString().Replace("rzuep.apphb.com", "rzuep.pl"));
+            Response.Redirect(uri.ToString().Replace("rzuep.apphb.com", "rzuep.pl").Replace(":" + uri.Port.ToString(), ""));
         }
     }
 }
