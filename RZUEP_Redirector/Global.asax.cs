@@ -11,9 +11,7 @@ namespace RZUEP_Redirector
     {
         protected void Application_BeginRequest()
         {
-            UriBuilder uri = new UriBuilder(Context.Request.Url);
-            uri.Scheme = "http";
-            Response.Redirect(uri.ToString().Replace("rzuep.apphb.com", "rzuep.pl").Replace(":" + uri.Port.ToString(), ""));
+            Response.Redirect("https://rzuep.pl");
         }
     }
 }
